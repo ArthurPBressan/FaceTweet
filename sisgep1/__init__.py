@@ -3,7 +3,7 @@ from __future__ import absolute_import
 
 from flask import Flask, redirect, url_for
 
-from sisgep1 import base
+from sisgep1 import base, feed
 
 
 def create_app(config=None):
@@ -11,6 +11,7 @@ def create_app(config=None):
     app.config.from_object('settings')
     app.config.from_pyfile('settings_local.py', silent=True)
 
+    feed.init_app(app)
     base.init_app(app)
 
     @app.route('/')
