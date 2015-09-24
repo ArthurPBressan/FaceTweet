@@ -11,7 +11,7 @@ def init_app(app):
     pass
 
 
-class Pessoa(db.Model, JSONSerializationMixin):
+class Usuario(db.Model, JSONSerializationMixin):
 
     id = Column(Integer, primary_key=True)
     nome = Column(String(300))
