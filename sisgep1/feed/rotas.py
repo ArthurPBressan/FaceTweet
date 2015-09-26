@@ -14,6 +14,7 @@ def init_app(app):
 
 
 @bp.route('/')
+@login_required
 def index():
     return render_template('feed.html')
 
