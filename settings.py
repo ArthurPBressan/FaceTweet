@@ -5,6 +5,7 @@ DEBUG = True
 
 SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/sisgep1.db'
 
+SECRET_KEY = 'seeeeeeeeeeeeeeeeeeeeeeeeeeeecret'
 
 SOCIAL_FACEBOOK = {
     'consumer_key': 'key',

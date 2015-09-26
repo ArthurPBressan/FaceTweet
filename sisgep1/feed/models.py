@@ -2,7 +2,7 @@
 from __future__ import absolute_import
 
 from flask.ext.security import Security, SQLAlchemyUserDatastore, \
-    UserMixin, RoleMixin, login_required
+    UserMixin, RoleMixin
 
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relationship, backref
@@ -19,8 +19,9 @@ def init_app(app):
 
     @app.before_first_request
     def create_user():
-        user_datastore.create_user(email='admin@admin', senha='admin')
-        db.session.commit()
+        if not User.query.filter_by(email='admin@admin').first():
+            user_datastore.create_user(email='admin@admin', password='admin')
+            db.session.commit()
 
 roles_users = db.Table('roles_users',
                        Column('user_id', Integer(), ForeignKey('user.id')),
