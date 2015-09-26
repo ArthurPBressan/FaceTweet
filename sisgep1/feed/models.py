@@ -14,7 +14,3 @@ def init_app(app):
 class Usuario(db.Model, JSONSerializationMixin):
 
     id = Column(Integer, primary_key=True)
-    nome = Column(String(300))
-    email = Column(String(255))
-    telefone = Column(String(255))
-    tipo = Column(String(255))

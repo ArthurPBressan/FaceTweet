@@ -3,11 +3,13 @@ from __future__ import absolute_import
 
 from datetime import datetime
 
+from flask import current_app
 from flask.json import JSONEncoder
 from flask.ext.assets import Environment
 from flask.ext.migrate import Migrate
 from flask.ext.sqlalchemy import SQLAlchemy
 
+from facebook import GraphAPI
 
 db = SQLAlchemy()
 
@@ -43,6 +45,7 @@ class AppJSONEncoder(JSONEncoder):
 
 
 def init_app(app):
+    app.extensions['facebook'] = GraphAPI(app.config['FACEBOOK_TOKEN'])
     Environment(app)
     db.init_app(app)
     Migrate(app, db)
