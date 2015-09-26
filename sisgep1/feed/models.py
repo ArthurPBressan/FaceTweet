@@ -18,7 +18,7 @@ social = Social()
 
 def init_app(app):
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
-    security.init_app(app, db, user_datastore)
+    security.init_app(app, user_datastore)
 
     @app.before_first_request
     def create_user():
