@@ -14,32 +14,32 @@ security = Security()
 
 
 def init_app(app):
-    usuario_datastore = SQLAlchemyUserDatastore(db, Usuario, Role)
-    security.init_app(app, db, usuario_datastore)
+    user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+    security.init_app(app, db, user_datastore)
 
     @app.before_first_request
     def create_user():
-        usuario_datastore.create_user(email='admin@admin', senha='admin')
+        user_datastore.create_user(email='admin@admin', senha='admin')
         db.session.commit()
 
-roles_users = db.Table('roles_usuarios',
-                       Column('usuario_id', Integer(), ForeignKey('usuario.id')),
+roles_users = db.Table('roles_users',
+                       Column('user_id', Integer(), ForeignKey('user.id')),
                        Column('role_id', Integer(), ForeignKey('role.id')))
 
 
 class Role(db.Model, RoleMixin, JSONSerializationMixin):
-    ignored_fields = ['usuarios']
+    ignored_fields = ['users']
 
     id = Column(Integer(), primary_key=True)
     name = Column(String(80), unique=True)
     description = Column(String(255))
 
 
-class Usuario(db.Model, UserMixin, JSONSerializationMixin):
+class User(db.Model, UserMixin, JSONSerializationMixin):
     id = Column(Integer, primary_key=True)
     email = Column(String(255), unique=True)
     password = Column(String(255))
     active = Column(Boolean())
     confirmed_at = Column(DateTime())
     roles = relationship('Role', secondary=roles_users,
-                         backref=backref('usuarios', lazy='dynamic'))
+                         backref=backref('users', lazy='dynamic'))
