@@ -43,6 +43,12 @@ class User(db.Model, UserMixin, JSONSerializationMixin):
     confirmed_at = Column(DateTime())
     roles = relationship('Role', secondary=roles_users,
                          backref=backref('users', lazy='dynamic'))
+    connections = relationship('Connection', backref='user')
+
+    def get_connection(self, name):
+        for connection in self.connections:
+            if connection.provider_id == name:
+                return connection
 
 
 class Connection(db.Model):

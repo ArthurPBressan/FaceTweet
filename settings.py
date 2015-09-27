@@ -15,7 +15,10 @@ SECURITY_POST_LOGIN = '/feed'
 
 SOCIAL_FACEBOOK = {
     'consumer_key': 'key',
-    'consumer_secret': 'secret'
+    'consumer_secret': 'secret',
+    'request_token_params': {
+        'scope': 'email,user_posts,publish_actions'
+    }
 }
 SOCIAL_TWITTER = {
     'consumer_key': 'key',
