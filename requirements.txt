@@ -9,5 +9,5 @@ Flask-WTF==0.12
 WTForms-SQLAlchemy==0.1
 requests==2.7.0
 Flask-Login==0.2.11
-Flask-Social-1.6.2
+git+git://github.com/ArthurPBressan/flask-social.git@fix_init
 Python-Twitter==2.2

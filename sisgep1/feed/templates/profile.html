@@ -1,6 +1,6 @@
 {% macro show_provider_button(provider_id, display_name, conn) %}
     {% if conn %}
-    <form action="{{ url_for('social.remove_connection', provider_id=conn.provider_id, provider_user_id=conn.provider_user_id) }}" method="DELETE">
+    <form method="POST" action="{{ url_for('social.remove_connection', provider_id=conn.provider_id, provider_user_id=conn.provider_user_id) }}">
       <input type="submit" value="Disconnect {{ display_name }}" />
     </form>
     {% else %}
@@ -13,5 +13,3 @@
 {{ show_provider_button('twitter', 'Twitter', twitter_conn) }}
 
 {{ show_provider_button('facebook', 'Facebook', facebook_conn) }}
-
-{{ show_provider_button('foursquare', 'foursquare', foursquare_conn) }}
