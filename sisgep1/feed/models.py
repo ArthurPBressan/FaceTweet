@@ -56,4 +56,6 @@ class Connection(db.Model):
     profile_url = Column(String(512))
     image_url = Column(String(512))
     rank = Column(Integer)
+
     full_name = Column(String(255))
+    email = Column(String(255))
