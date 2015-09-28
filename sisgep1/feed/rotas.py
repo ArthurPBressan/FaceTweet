@@ -44,9 +44,11 @@ def index():
 def post_facebook():
     fb = social.facebook.get_api()
     fb_user_connection = current_user.get_connection('facebook')
-    import ipdb;ipdb.set_trace();
+    message = request.form['message'].encode('utf-8')
+    fb.put_object(parent_object=fb_user_connection.provider_user_id,
+                  connection_name='feed', message=message)
     return redirect(url_for('.index'))
-    pass
+
 
 @bp.route('/profile')
 @login_required
