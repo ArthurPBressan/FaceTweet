@@ -5,11 +5,36 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>{% block title %}{% endblock %} | Sisge</title>
+    <title>{% block title %}{% endblock %} | Facetweet</title>
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    {% block head_tail %}
+
+    {% endblock %}
   </head>
   <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Facetweet</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse navbar-right" style="margin-top: 7px">
+            <a href="{{ url_for('feed.profile') }} " class="btn btn-default">
+                <i class="glyphicon glyphicon-cog"></i>
+                Editar perfil
+            </a>
+            <a href="{{ url_for_security('logout') }} " class="btn btn-danger">
+                <i class="glyphicon glyphicon-off"></i>
+                Sair
+            </a>
+        </div>
+      </div>
+    </nav>
     {% block content %}
 
     {% endblock %}

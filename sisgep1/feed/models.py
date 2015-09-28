@@ -65,3 +65,7 @@ class Connection(db.Model):
 
     full_name = Column(String(255))
     email = Column(String(255))
+
+    cover_url = Column(String(512))
+    cover_x = Column(Integer)
+    cover_y = Column(Integer)
