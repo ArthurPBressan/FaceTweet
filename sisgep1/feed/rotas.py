@@ -33,8 +33,8 @@ def index():
         args = {
             'fields': ['message', 'story', 'picture', 'link'],
         }
-        # fb_posts = fb.get_connections(id=fb_user_connection.provider_user_id,
-                                      # connection_name='posts', **args)['data']
+        fb_posts = fb.get_connections(id=fb_user_connection.provider_user_id,
+                                      connection_name='posts', **args)['data']
     return render_template('feed.html', fb_posts=fb_posts,
                            fb_connection=fb_user_connection)
 

@@ -5,10 +5,10 @@
 
 {% block head_tail %}
     <style type="text/css">
-        .picture_text {
+        .post-picture-text {
             margin-left: 160px;
         }
-        .image {
+        .image-cover {
             position: relative;
             min-height: 310px;
             overflow: hidden;
@@ -17,7 +17,7 @@
             background-position: {{ fb_connection.cover_x}}em -{{ fb_connection.cover_y }}em;
             background-image: url('{{ fb_connection.cover_url | safe }}');
         }
-        .image > h1 {
+        .image-cover > h1 {
             position: absolute;
             top: 200px;
             left: 26px;
@@ -26,11 +26,21 @@
             color: white;
             margin: 0;
         }
+        .media-avatar {
+            position: absolute;
+            left: 50%;
+            margin-right: -50%;
+            transform: translate(-50%, 0);
+            width: 140px;
+        }
+        .facebook-post:nth-of-type(1) {
+            margin-top: 160px;
+        }
     </style>
 {% endblock %}
 
 {% block content %}
-<div class="jumbotron container image">
+<div class="jumbotron container image-cover">
     <img src="" style="width: 100%"></img>
     <h1>{{ fb_connection.full_name }}</h1>
 </div>
@@ -38,9 +48,9 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <h2>Facebook</h2>
+            <img src="{{ fb_connection.image_url }}" class="media-avatar img-thumbnail">
             {% for post in fb_posts %}
-                <div class="panel panel-default">
+                <div class="panel panel-default facebook-post">
                     <div class="panel-heading">
                         {% if post.story %}
                             {{ post.story }}
@@ -54,7 +64,7 @@
                                 <img src="{{ post.picture }}" class=" pull-left"></img>
                             </a>
                         {% endif %}
-                        <p class="{{ 'picture_text' if post.picture }}">
+                        <p class="{{ 'post-picture-text' if post.picture }}">
                             {{ post.message }}
                         </p>
                     </div>
