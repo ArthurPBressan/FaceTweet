@@ -1,7 +1,7 @@
 # coding: UTF-8
 from __future__ import absolute_import
 
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, url_for, redirect, request
 from flask.ext.security import login_required, current_user
 
 from sisgep1.base import db
@@ -38,6 +38,15 @@ def index():
     return render_template('feed.html', fb_posts=fb_posts,
                            fb_connection=fb_user_connection)
 
+
+@bp.route('/facebook/post/', methods=['POST'])
+@login_required
+def post_facebook():
+    fb = social.facebook.get_api()
+    fb_user_connection = current_user.get_connection('facebook')
+    import ipdb;ipdb.set_trace();
+    return redirect(url_for('.index'))
+    pass
 
 @bp.route('/profile')
 @login_required
