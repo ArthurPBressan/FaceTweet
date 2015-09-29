@@ -11,6 +11,10 @@
     {% endif %}
 {% endmacro %}
 
+{% block title %}
+    Profile
+{% endblock %}
+
 {% block content %}
     {{ show_provider_button('twitter', 'Twitter', twitter_conn) }}
     {{ show_provider_button('facebook', 'Facebook', facebook_conn) }}

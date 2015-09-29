@@ -28,17 +28,21 @@
         <div id="navbar" class="navbar-collapse collapse navbar-right" style="margin-top: 7px">
         {% if not current_user.is_anonymous() %}
             <a href="{{ url_for('feed.profile') }} " class="btn btn-default">
-                <i class="glyphicon glyphicon-cog"></i>
                 Profile
+                <i class="glyphicon glyphicon-cog"></i>
             </a>
             <a href="{{ url_for_security('logout') }} " class="btn btn-danger">
-                <i class="glyphicon glyphicon-off"></i>
                 Logout
+                <i class="glyphicon glyphicon-off"></i>
             </a>
         {% else %}
-            <a href="{{ url_for_security('login') }}" class="btn btn-success">
+            <a href="{{ url_for_security('login') }}" class="btn btn-default">
                 Login
                 <i class="glyphicon glyphicon-arrow-right"></i>
+            </a>
+            <a href="{{ url_for_security('register') }}" class="btn btn-success">
+                Register
+                <i class="glyphicon glyphicon-plus"></i>
             </a>
         {% endif %}
         </div>
