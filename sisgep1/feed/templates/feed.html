@@ -11,7 +11,7 @@
         .image-cover {
             position: relative;
             min-height: 310px;
-            min-width: 1170px;
+            max-width: 1145px;
             overflow: hidden;
             background-repeat: no-repeat;
             background-size: cover;
@@ -34,14 +34,12 @@
 {% endblock %}
 
 {% block content %}
-{% if facebook %}
-<div class="jumbotron container image-cover">
-    <img src="" style="width: 100%"></img>
-    <h1>{{ facebook.full_name }}</h1>
-</div>
-{% endif %}
-
-<div class="container">
+    {% if facebook %}
+    <div class="jumbotron container image-cover">
+        <img src="" style="width: 100%"></img>
+        <h1>{{ facebook.full_name }}</h1>
+    </div>
+    {% endif %}
     <div class="row">
         <div class="col-md-6">
         {% if facebook %}
@@ -114,16 +112,9 @@
                     </div>
                 </div>
             {% endfor %}
-            {# <a class="twitter-timeline"  href="https://twitter.com/{{ twitter.full_name }}" data-widget-id="646837097211523073" #}
-              {# data-tweet-limit="20" height='5000'>Tweets by {{ twitter.display_name }}</a> #}
             {% endif %}
         </div>
     </div>
-</div>
 {% endblock %}
 
-{% block tail %}
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-<script type="text/javascript">$(function() {$('#twitter-widget-0').height(0);});</script>
-{% endblock %}
 

@@ -1,3 +1,4 @@
+{% extends "base.html" %}
 {% macro show_provider_button(provider_id, display_name, conn) %}
     {% if conn %}
     <form method="POST" action="{{ url_for('social.remove_connection', provider_id=conn.provider_id, provider_user_id=conn.provider_user_id) }}">
@@ -10,6 +11,7 @@
     {% endif %}
 {% endmacro %}
 
-{{ show_provider_button('twitter', 'Twitter', twitter_conn) }}
-
-{{ show_provider_button('facebook', 'Facebook', facebook_conn) }}
+{% block content %}
+    {{ show_provider_button('twitter', 'Twitter', twitter_conn) }}
+    {{ show_provider_button('facebook', 'Facebook', facebook_conn) }}
+{% endblock %}
