@@ -15,8 +15,8 @@
             overflow: hidden;
             background-repeat: no-repeat;
             background-size: cover;
-            background-position: {{ fb_connection.cover_x}}em -{{ fb_connection.cover_y }}em;
-            background-image: url('{{ fb_connection.cover_url | safe }}');
+            background-position: {{ facebook.cover_x}}em -{{ facebook.cover_y }}em;
+            background-image: url('{{ facebook.cover_url | safe }}');
         }
         .image-cover > h1 {
             position: absolute;
@@ -34,21 +34,21 @@
 {% endblock %}
 
 {% block content %}
-{% if fb_connection %}
+{% if facebook %}
 <div class="jumbotron container image-cover">
     <img src="" style="width: 100%"></img>
-    <h1>{{ fb_connection.full_name }}</h1>
+    <h1>{{ facebook.full_name }}</h1>
 </div>
 {% endif %}
 
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-        {% if fb_connection %}
-            <img src="{{ fb_connection.image_url }}" class="center-block img-responsive img-thumbnail media-avatar">
+        {% if facebook %}
+            <img src="{{ facebook.image_url }}" class="center-block img-responsive img-thumbnail media-avatar">
             <div class="panel panel-primary facebook-post">
                 <div class="panel-heading">
-                    Novo post
+                    New post
                 </div>
                 <form action="{{ url_for('feed.post_facebook') }}" method="POST">
                     <div class="panel-body">
@@ -56,7 +56,7 @@
                     </div>
                     <div class="panel-footer">
                         <button type="submit" class="btn btn-primary">
-                            Postar
+                            Post
                         </button>
                     </div>
                 </form>
@@ -67,7 +67,7 @@
                         {% if post.story %}
                             {{ post.story }}
                         {% else %}
-                            {{ fb_connection.full_name }} posted:
+                            {{ facebook.full_name }} posted:
                         {% endif %}
                     </div>
                     <div class="panel-body">
@@ -84,16 +84,19 @@
             {% endfor %}
         </div>
         {% endif %}
+        {% if twitter %}
         <div class="col-md-6">
-            <h2>Twitter</h2>
-            <a class="twitter-timeline"  href="https://twitter.com/HardDiskD" data-widget-id="646837097211523073"
-              data-tweet-limit="20">>Tweets by @HardDiskD</a>
+            <img src="{{ twitter.image_url }}" class="center-block img-responsive img-thumbnail media-avatar">
+            <a class="twitter-timeline"  href="https://twitter.com/{{ twitter.full_name }}" data-widget-id="646837097211523073"
+              data-tweet-limit="20" height='5000'>Tweets by {{ twitter.display_name }}</a>
         </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
 
 {% block tail %}
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+<script type="text/javascript">$(function() {$('#twitter-widget-0').height(0);});</script>
 {% endblock %}
 

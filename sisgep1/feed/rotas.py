@@ -20,7 +20,7 @@ def index():
     fb = social.facebook.get_api()
     fb_user_connection = current_user.get_connection('facebook')
     fb_posts = []
-    if fb_user_connection:
+    if fb_user_connection and False:
         if not fb_user_connection.cover_url:
             cover_node = fb.get_connections(id=fb_user_connection.provider_user_id,
                                             connection_name='',
@@ -35,8 +35,15 @@ def index():
         }
         fb_posts = fb.get_connections(id=fb_user_connection.provider_user_id,
                                       connection_name='posts', **args)['data']
+    twitter = social.twitter.get_api()
+    twitter_user_connection = current_user.get_connection('twitter')
+    if twitter_user_connection:
+        for twitter_post in twitter.GetUserTimeline(twitter_user_connection.display_name):
+            print twitter_post
+            import ipdb;ipdb.set_trace();
     return render_template('feed.html', fb_posts=fb_posts,
-                           fb_connection=fb_user_connection)
+                           facebook=fb_user_connection,
+                           twitter=twitter_user_connection)
 
 
 @bp.route('/facebook/post/', methods=['POST'])
