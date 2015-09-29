@@ -46,7 +46,7 @@
         <div class="col-md-6">
         {% if facebook %}
             <img src="{{ facebook.image_url }}" class="center-block img-responsive img-thumbnail media-avatar">
-            <div class="panel panel-primary facebook-post">
+            <div class="panel panel-primary">
                 <div class="panel-heading">
                     New post
                 </div>
@@ -62,7 +62,7 @@
                 </form>
             </div>
             {% for post in fb_posts %}
-                <div class="panel panel-default facebook-post">
+                <div class="panel panel-default">
                     <div class="panel-heading">
                         {% if post.story %}
                             {{ post.story }}
@@ -84,13 +84,40 @@
             {% endfor %}
         </div>
         {% endif %}
-        {% if twitter %}
         <div class="col-md-6">
+            {% if twitter %}
             <img src="{{ twitter.image_url }}" class="center-block img-responsive img-thumbnail media-avatar">
-            <a class="twitter-timeline"  href="https://twitter.com/{{ twitter.full_name }}" data-widget-id="646837097211523073"
-              data-tweet-limit="20" height='5000'>Tweets by {{ twitter.display_name }}</a>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    New tweet
+                </div>
+                <form action="{{ url_for('feed.post_twitter') }}" method="POST">
+                    <div class="panel-body">
+                        <textarea name="message" required style="width: 100%; height: 5em;"></textarea>
+                    </div>
+                    <div class="panel-footer">
+                        <button type="submit" class="btn btn-primary">
+                            Tweet
+                        </button>
+                    </div>
+                </form>
+            </div>
+            {% for tweet in tweets %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        {{ twitter.display_name }} {% if tweet.GetRetweeted() %}re{% endif %}tweeted:
+                    </div>
+                    <div class="panel-body">
+                        <p>
+                            {{ tweet.GetText() }}
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+            {# <a class="twitter-timeline"  href="https://twitter.com/{{ twitter.full_name }}" data-widget-id="646837097211523073" #}
+              {# data-tweet-limit="20" height='5000'>Tweets by {{ twitter.display_name }}</a> #}
+            {% endif %}
         </div>
-        {% endif %}
     </div>
 </div>
 {% endblock %}

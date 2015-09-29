@@ -1,7 +1,7 @@
 # coding: UTF-8
 from __future__ import absolute_import
 
-from flask import Blueprint, render_template, url_for, redirect, request
+from flask import Blueprint, render_template, url_for, redirect, request, flash
 from flask.ext.security import login_required, current_user
 
 from sisgep1.base import db
@@ -20,7 +20,7 @@ def index():
     fb = social.facebook.get_api()
     fb_user_connection = current_user.get_connection('facebook')
     fb_posts = []
-    if fb_user_connection and False:
+    if fb_user_connection:
         if not fb_user_connection.cover_url:
             cover_node = fb.get_connections(id=fb_user_connection.provider_user_id,
                                             connection_name='',
@@ -38,10 +38,8 @@ def index():
     twitter = social.twitter.get_api()
     twitter_user_connection = current_user.get_connection('twitter')
     if twitter_user_connection:
-        for twitter_post in twitter.GetUserTimeline(twitter_user_connection.display_name):
-            print twitter_post
-            import ipdb;ipdb.set_trace();
-    return render_template('feed.html', fb_posts=fb_posts,
+        tweets = twitter.GetUserTimeline(twitter_user_connection.display_name)
+    return render_template('feed.html', fb_posts=fb_posts, tweets=tweets,
                            facebook=fb_user_connection,
                            twitter=twitter_user_connection)
 
@@ -54,6 +52,18 @@ def post_facebook():
     message = request.form['message'].encode('utf-8')
     fb.put_object(parent_object=fb_user_connection.provider_user_id,
                   connection_name='feed', message=message)
+    return redirect(url_for('.index'))
+
+
+@bp.route('/twitter/post/', methods=['POST'])
+@login_required
+def post_twitter():
+    message = request.form['message']
+    if len(message) > 140:
+        flash('Status is over 140 characters.')
+    else:
+        twitter = social.twitter.get_api()
+        twitter.PostUpdate(message)
     return redirect(url_for('.index'))
 
 
