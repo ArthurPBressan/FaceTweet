@@ -60,7 +60,7 @@ def post_facebook():
 def post_twitter():
     message = request.form['message']
     if len(message) > 140:
-        flash('Status is over 140 characters.')
+        flash('Status is over 140 characters.', 'danger')
     else:
         twitter = social.twitter.get_api()
         twitter.PostUpdate(message)
