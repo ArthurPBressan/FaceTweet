@@ -43,6 +43,7 @@
         <div class="col-md-6">
         {% if facebook %}
             <img src="{{ facebook.image_url }}" class="center-block img-responsive img-thumbnail media-avatar">
+            {% if same_user %}
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     New post
@@ -58,7 +59,8 @@
                     </div>
                 </form>
             </div>
-            {% for post in fb_posts %}
+            {% endif %}
+            {% for post in posts %}
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         {% if post.story %}
@@ -79,11 +81,18 @@
                     </div>
                 </div>
             {% endfor %}
-        </div>
+        {% else %}
+        {% if not same_user %}
+            {{ user.email }} hasn't connected their Facebook.
+        {% else %}
+            Facebook not connected. :( Connect to it via <a href="{{ url_for('feed.profile') }}">your profile</a>.
         {% endif %}
+        {% endif %}
+        </div>
         <div class="col-md-6">
             {% if twitter %}
             <img src="{{ twitter.image_url }}" class="center-block img-responsive img-thumbnail media-avatar">
+            {% if same_user %}
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     New tweet
@@ -99,6 +108,7 @@
                     </div>
                 </form>
             </div>
+            {% endif %}
             {% for tweet in tweets %}
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -111,6 +121,12 @@
                     </div>
                 </div>
             {% endfor %}
+            {% else %}
+            {% if not same_user %}
+                {{ user.email }} hasn't connected their Twitter.
+            {% else %}
+                Twitter not connected. :( Connect to it via <a href="{{ url_for('feed.profile') }}">your profile</a>.
+            {% endif %}
             {% endif %}
         </div>
     </div>

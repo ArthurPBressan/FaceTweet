@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, url_for, redirect, request, flash
 from flask.ext.security import login_required, current_user
 
 from sisgep1.base import db
-from sisgep1.feed.models import social
+from sisgep1.feed.models import social, User
 
 bp = Blueprint('feed', __name__, static_folder='static', template_folder='templates')
 
@@ -15,16 +15,20 @@ def init_app(app):
 
 
 @bp.route('/')
+@bp.route('/<user_email>')
 @login_required
-def index():
+def index(user_email=None):
+    if not user_email:
+        return redirect(url_for('.index', user_email=current_user.email))
+    user = User.query.filter_by(email=user_email).first_or_404()
+    same_user = user == current_user
     fb = social.facebook.get_api()
-    fb_user_connection = current_user.get_connection('facebook')
-    fb_posts = []
+    fb_user_connection = user.get_connection('facebook')
+    posts = []
     if fb_user_connection:
-        if not fb_user_connection.cover_url:
-            cover_node = fb.get_connections(id=fb_user_connection.provider_user_id,
-                                            connection_name='',
-                                            fields='cover').get('cover')
+        if not fb_user_connection.cover_url and same_user:
+            cover_node = fb.get_object(id=fb_user_connection.provider_user_id,
+                                       fields='cover').get('cover')
             if cover_node:
                 fb_user_connection.cover_url = cover_node['source']
                 fb_user_connection.cover_x = cover_node.get('offset_x', 0)
@@ -33,15 +37,16 @@ def index():
         args = {
             'fields': ['message', 'story', 'picture', 'link'],
         }
-        fb_posts = fb.get_connections(id=fb_user_connection.provider_user_id,
-                                      connection_name='posts', **args)['data']
+        posts = fb.get_connections(id=fb_user_connection.provider_user_id,
+                                   connection_name='posts', **args)['data']
     twitter = social.twitter.get_api()
-    twitter_user_connection = current_user.get_connection('twitter')
+    twitter_user_connection = user.get_connection('twitter')
+    tweets = []
     if twitter_user_connection:
-        tweets = twitter.GetUserTimeline(twitter_user_connection.display_name)
-    return render_template('feed.html', fb_posts=fb_posts, tweets=tweets,
-                           facebook=fb_user_connection,
-                           twitter=twitter_user_connection)
+        tweets = twitter.GetUserTimeline()
+    return render_template('feed.html', posts=posts, tweets=tweets,
+                           facebook=fb_user_connection, same_user=same_user,
+                           twitter=twitter_user_connection, user=user)
 
 
 @bp.route('/facebook/post/', methods=['POST'])
