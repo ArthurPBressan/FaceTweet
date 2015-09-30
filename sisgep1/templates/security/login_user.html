@@ -1,28 +1,111 @@
 {% extends "base.html" %}
 {% from "security/_macros.html" import render_field_with_errors, render_field %}
 
+{% block head_tail %}
+    <style type="text/css">
+        body {
+          padding-top: 40px;
+          padding-bottom: 40px;
+          background-color: #eee;
+        }
+
+        .form-signin {
+          max-width: 330px;
+          padding: 15px;
+          margin: 0 auto;
+        }
+        .form-signin .form-signin-heading,
+        .form-signin .checkbox {
+          margin-bottom: 10px;
+        }
+        .form-signin .checkbox {
+          font-weight: normal;
+        }
+        .form-signin .form-control {
+          position: relative;
+          height: auto;
+          -webkit-box-sizing: border-box;
+             -moz-box-sizing: border-box;
+                  box-sizing: border-box;
+          padding: 10px;
+          font-size: 16px;
+        }
+        .form-signin .form-control:focus {
+          z-index: 2;
+        }
+        .form-signin input[type="email"] {
+          margin-bottom: -1px;
+          border-bottom-right-radius: 0;
+          border-bottom-left-radius: 0;
+        }
+        .form-signin input[type="password"] {
+          margin-bottom: 10px;
+          border-top-left-radius: 0;
+          border-top-right-radius: 0;
+        }
+        .social-login {
+            width: 200px;
+            height: 3em;
+            border: 0;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            color: white;
+        }
+        .social-login.social-login-facebook {
+            background-color: #3B5998;
+        }
+        .social-login.social-login-twitter {
+            background-color: #292f33;
+        }
+
+    </style>
+{% endblock %}
+
 {% block title %}
     Login
 {% endblock %}
 
 {% block content %}
-{% include "security/_messages.html" %}
-<h1>Login</h1>
-<form action="{{ url_for_security('login') }}" method="POST" name="login_user_form">
-  {{ login_user_form.hidden_tag() }}
-  {{ render_field_with_errors(login_user_form.email) }}
-  {{ render_field_with_errors(login_user_form.password) }}
-  {{ render_field_with_errors(login_user_form.remember) }}
-  {{ render_field(login_user_form.next) }}
-  {{ render_field(login_user_form.submit) }}
-</form>
-{{ social_login('twitter', 'Twitter' )}}
-{{ social_login('facebook', 'Facebook' )}}
+<div class="row">
+    <div class="col-md-5">
+        <div class="center-block" style="width: 92px">
+            <h2 class="form-signin-heading">Sign in</h2>
+        </div>
+        <form class="form-signin" action="{{ url_for_security('login') }}" method="POST" name="login_user_form">
+          {{ login_user_form.hidden_tag() }}
+          {{ render_field_with_errors(login_user_form.email, class_='form-control') }}
+          {{ render_field_with_errors(login_user_form.password, class_='form-control') }}
+          <div class="checkbox">
+            <label>
+                {{ render_field(login_user_form.remember) }} Remember me
+            </label>
+          </div>
+          {{ render_field(login_user_form.next) }}
+          {{ render_field(login_user_form.submit, class_='btn btn-lg btn-primary btn-block') }}
+        </form>
+    </div>
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-5">
+        <div class="center-block" style="width: 167px">
+            <h2 class="form-signin-heading">Sign in with social media</h2>
+        </div>
+        <div class="text-center">
+            {{ social_login('twitter', 'Twitter' )}}
+            {{ social_login('facebook', 'Facebook' )}}
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% macro social_login(provider_id, display_name) %}
   <form action="{{ url_for('social.login', provider_id=provider_id) }}" method="POST">
-    <input type="submit" value="Login with {{ display_name }}" />
+    <button type="submit" class="social-login social-login-{{ provider_id }}">
+        <img src="{{ url_for('static', filename='img/' + provider_id + '-29.png')}}" class="pull-left">
+        <span>
+            Login with {{ display_name }}
+        </span>
+    </button>
   </form>
 {% endmacro %}
 
