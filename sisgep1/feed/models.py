@@ -26,6 +26,10 @@ roles_users = db.Table('roles_users',
                        Column('user_id', Integer(), ForeignKey('user.id')),
                        Column('role_id', Integer(), ForeignKey('role.id')))
 
+followers = db.Table('followers',
+                     Column('follower_id', Integer(), ForeignKey('user.id')),
+                     Column('followed_id', Integer(), ForeignKey('user.id')))
+
 
 class Role(db.Model, RoleMixin, JSONSerializationMixin):
     ignored_fields = ['users']
@@ -44,6 +48,13 @@ class User(db.Model, UserMixin, JSONSerializationMixin):
     roles = relationship('Role', secondary=roles_users,
                          backref=backref('users', lazy='dynamic'))
     connections = relationship('Connection', backref='user')
+
+    followed = relationship('User',
+                            secondary=followers,
+                            primaryjoin=(followers.c.follower_id == id),
+                            secondaryjoin=(followers.c.followed_id == id),
+                            backref=backref('followers', lazy='dynamic'),
+                            lazy='dynamic')
 
     def get_connection(self, name):
         for connection in self.connections:
