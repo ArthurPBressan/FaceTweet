@@ -33,7 +33,39 @@
             {{ show_provider_button('facebook', 'Facebook', facebook_conn) }}
         </div>
         <div class="col-md-6">
-
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    Followed and Followers
+                </div>
+                {% if current_user.followers %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>E-mail</th>
+                            <th>Unfollow</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for follower in current_user.followers %}
+                        <tr>
+                            <td style="vertical-align: middle">
+                                <a href="{{ url_for('feed.index', user_email=follower.email) }}">
+                                    {{ follower.email }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('feed.unfollow', email=follower.email) }}" class="btn btn-danger">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                Follow people to build your following. People you follow also automatically follow you.
+                {% endif %}
+            </div>
         </div>
     </div>
 {% endblock %}

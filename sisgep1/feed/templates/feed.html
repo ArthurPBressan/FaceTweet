@@ -39,6 +39,13 @@
         <h1>{{ facebook.full_name }}</h1>
     </div>
     {% endif %}
+    {% if is_following == False %}
+        To see what {{ user.email }} shares,
+        <a class="btn btn-success" href="{{ url_for('feed.follow', email=user.email) }}">
+            <span class="glyphicon glyphicon-user"></span>
+            Follow them!
+        </a>
+    {% else %}
     <div class="row">
         <div class="col-md-6">
         {% if facebook %}
@@ -130,6 +137,7 @@
             {% endif %}
         </div>
     </div>
+    {% endif %}
 {% endblock %}
 
 

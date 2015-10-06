@@ -22,10 +22,13 @@ def index(user_email=None):
         return redirect(url_for('.index', user_email=current_user.email))
     user = User.query.filter_by(email=user_email).first_or_404()
     same_user = user == current_user
+    is_following = None
+    if not same_user:
+        is_following = current_user.is_following(user)
     fb = social.facebook.get_api()
     fb_user_connection = user.get_connection('facebook')
     posts = []
-    if fb_user_connection:
+    if fb_user_connection and same_user:
         if not fb_user_connection.cover_url and same_user:
             cover_node = fb.get_object(id=fb_user_connection.provider_user_id,
                                        fields='cover').get('cover')
@@ -42,11 +45,36 @@ def index(user_email=None):
     twitter = social.twitter.get_api()
     twitter_user_connection = user.get_connection('twitter')
     tweets = []
-    if twitter_user_connection:
-        tweets = twitter.GetUserTimeline()
+    if twitter_user_connection and same_user:
+        tweets = twitter.GetUserTimeline(twitter_user_connection.display_name)
     return render_template('feed.html', posts=posts, tweets=tweets,
                            facebook=fb_user_connection, same_user=same_user,
-                           twitter=twitter_user_connection, user=user)
+                           twitter=twitter_user_connection, user=user,
+                           is_following=is_following)
+
+
+@bp.route('/follow/')
+@login_required
+def follow():
+    email = request.args['email']
+    user = User.query.filter_by(email=email).first()
+    current_user.follow(user)
+    user.follow(current_user)
+    db.session.commit()
+    flash('You are now following {}'.format(email), 'info')
+    return redirect(url_for('.index', user_email=email))
+
+
+@bp.route('/unfollow/')
+@login_required
+def unfollow():
+    email = request.args['email']
+    user = User.query.filter_by(email=email).first()
+    current_user.unfollow(user)
+    user.unfollow(current_user)
+    db.session.commit()
+    flash('You stopped following {}'.format(email), 'info')
+    return redirect(url_for('.profile'))
 
 
 @bp.route('/facebook/post/', methods=['POST'])
