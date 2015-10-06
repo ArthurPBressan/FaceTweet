@@ -1,29 +1,10 @@
 {% extends "base.html" %}
 
-{% block head_tail %}
-    <style type="text/css">
-        .social-login {
-            width: 200px;
-            height: 3em;
-            border: 0;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            color: white;
-        }
-        .social-login.social-login-facebook {
-            background-color: #3B5998;
-        }
-        .social-login.social-login-twitter {
-            background-color: #292f33;
-        }
-    </style>
-{% endblock %}
-
 {% macro show_provider_button(provider_id, display_name, conn) %}
     {% if conn %}
     <form method="POST" action="{{ url_for('social.remove_connection', provider_id=conn.provider_id, provider_user_id=conn.provider_user_id) }}">
-        <button type="submit" class="social-login social-login-{{ provider_id }}">
-            <img src="{{ url_for('static', filename='img/' + provider_id + '-29.png')}}" class="pull-left">
+        <button type="submit" class="btn btn-block btn-social btn-{{ provider_id }}">
+            <i class="fa fa-{{ provider_id }}"></i>
             <span>
                 Disconnect {{ display_name }}
             </span>
@@ -31,8 +12,8 @@
     </form>
     {% else %}
     <form action="{{ url_for('social.connect', provider_id=provider_id) }}" method="POST">
-        <button type="submit" class="social-login social-login-{{ provider_id }}">
-            <img src="{{ url_for('static', filename='img/' + provider_id + '-29.png')}}" class="pull-left">
+        <button type="submit" class="btn btn-block btn-social btn-{{ provider_id }}">
+            <i class="fa fa-{{ provider_id }}"></i>
             <span>
                 Connect {{ display_name }}
             </span>
@@ -46,6 +27,13 @@
 {% endblock %}
 
 {% block content %}
-    {{ show_provider_button('twitter', 'Twitter', twitter_conn) }}
-    {{ show_provider_button('facebook', 'Facebook', facebook_conn) }}
+    <div class="row">
+        <div class="col-md-6">
+            {{ show_provider_button('twitter', 'Twitter', twitter_conn) }}
+            {{ show_provider_button('facebook', 'Facebook', facebook_conn) }}
+        </div>
+        <div class="col-md-6">
+
+        </div>
+    </div>
 {% endblock %}
